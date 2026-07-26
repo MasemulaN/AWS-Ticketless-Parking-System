@@ -12,37 +12,26 @@ function App() {
       <main>
 
 <section className="upload-section">
-
   <h2>Vehicle Processing</h2>
 
-  <label htmlFor="vehicleImage">
-    Upload Vehicle Image
-  </label>
+  <label htmlFor="vehicleImage">Upload Vehicle Image</label>
+  <input type="file" id="vehicleImage" accept="image/*" />
 
-  <input
-    type="file"
-    id="vehicleImage"
-    accept="image/*"
-  />
-    <h3>Operation</h3>
+  <h3>Operation</h3>
 
-  <label>
-    <input
-      type="radio"
-      name="operation"
-      value="entry"
-    />
-    Entry
-  </label>
+  <div className="operation-options">
+    <label>
+      <input type="radio" name="operation" value="entry" />
+      Entry
+    </label>
 
-  <label>
-    <input
-      type="radio"
-      name="operation"
-      value="exit"
-    />
-    Exit
-  </label>
+    <label>
+      <input type="radio" name="operation" value="exit" />
+      Exit
+    </label>
+  </div>
+
+  <button>Process Vehicle</button>
 </section>
 
         <section className="result-section">
