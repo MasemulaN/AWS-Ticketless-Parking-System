@@ -34,16 +34,28 @@ setTime(new Date().toLocaleString())
   <h3>Operation</h3>
 
   <div className="operation-options">
-    <label>
-      <input type="radio" name="operation" value="entry" />
-      Entry
-    </label>
 
-    <label>
-      <input type="radio" name="operation" value="exit" />
-      Exit
-    </label>
-  </div>
+  <label>
+    <input
+      type="radio"
+      name="operation"
+      value="Entry"
+      onChange={() => handleOperationChange("Entry")}
+    />
+    Entry
+  </label>
+
+  <label>
+    <input
+      type="radio"
+      name="operation"
+      value="Exit"
+      onChange={() => handleOperationChange("Exit")}
+    />
+    Exit
+  </label>
+
+</div>
 
   <button onClick={handleProcessVehicle}>
     Process Vehicle
@@ -58,9 +70,43 @@ setTime(new Date().toLocaleString())
           <p><strong>Time:</strong> {time}</p>
         </section>
 
-        <section className="sessions-section">
-          <h2>Active Parking Sessions</h2>
-        </section>
+       <section className="sessions-section">
+  <h2>Active Parking Sessions</h2>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>License Plate</th>
+        <th>Entry Time</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>CA 123-456</td>
+        <td>27 Jul 2026 09:30</td>
+        <td>Parked</td>
+      </tr>
+
+      <tr>
+        <td>GP 456-789</td>
+        <td>27 Jul 2026 10:15</td>
+        <td>Parked</td>
+      </tr>
+
+      <tr>
+        <td>ND 321-654</td>
+        <td>27 Jul 2026 11:05</td>
+        <td>Parked</td>
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</section>
 
       </main>
 
