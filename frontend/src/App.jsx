@@ -1,18 +1,44 @@
 import { useState } from 'react'
 import './App.css'
 
+const VITE_API_URL = import.meta.env.VITE_API_URL;
+
 function App() {
   
 const [plateNumber, setPlateNumber] = useState("No vehicle detected")
 const [operation, setOperation] = useState("No operation selected")
 const [status, setStatus] = useState("Waiting for processing")
 const [time, setTime] = useState("No timestap available")
+const [selectedOperation, setSelectedOperation] = useState("");
 
-function handleProcessVehicle() {
-setPlateNumber("CA 123-456")
-setOperation ("Entry")
-setStatus("Vehicle Recorded Successfully")
-setTime(new Date().toLocaleString())
+async function handleProcessVehicle() {
+  try {
+
+    
+    const response = await fetch(`${VITE_API_URL}/process-image`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        operation: selectedOperation,
+      }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message || "Request failed");
+}
+
+    setPlateNumber(data.plateNumber);
+    setOperation(data.operation);
+    setStatus(data.status);
+    setTime(data.time);
+
+  } catch (error) {
+    console.error(error);
+    setStatus("Error connecting to AWS");
+  }
 }
 
   return (
@@ -40,7 +66,7 @@ setTime(new Date().toLocaleString())
       type="radio"
       name="operation"
       value="Entry"
-      onChange={() => handleOperationChange("Entry")}
+      onChange={() => setSelectedOperation("Entry")}
     />
     Entry
   </label>
@@ -50,7 +76,7 @@ setTime(new Date().toLocaleString())
       type="radio"
       name="operation"
       value="Exit"
-      onChange={() => handleOperationChange("Exit")}
+      onChange={() => setSelectedOperation("Exit")}
     />
     Exit
   </label>
