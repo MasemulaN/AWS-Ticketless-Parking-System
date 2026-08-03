@@ -10,11 +10,39 @@ const [operation, setOperation] = useState("No operation selected")
 const [status, setStatus] = useState("Waiting for processing")
 const [time, setTime] = useState("No timestap available")
 const [selectedOperation, setSelectedOperation] = useState("");
+const [selectedFile, setSelectedFile] = useState(null);
+
+function convertToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      resolve(reader.result.split(",")[1]);
+    };
+
+    reader.onerror = (error) => {
+      reject(error);
+    };
+  });
+}
 
 async function handleProcessVehicle() {
+  if (!selectedFile) {
+  alert("Please select a vehicle image.");
+  return;
+}
+
+if (!selectedOperation) {
+  alert("Please select Entry or Exit.");
+  return;
+}
+
   try {
 
-    
+    const imageBase64 = await convertToBase64(selectedFile);
+
     const response = await fetch(`${VITE_API_URL}/process-image`, {
       method: "POST",
       headers: {
@@ -22,6 +50,7 @@ async function handleProcessVehicle() {
       },
       body: JSON.stringify({
         operation: selectedOperation,
+        image: imageBase64,
       }),
     });
 
@@ -55,7 +84,12 @@ async function handleProcessVehicle() {
   <h2>Vehicle Processing</h2>
 
   <label htmlFor="vehicleImage">Upload Vehicle Image</label>
-  <input type="file" id="vehicleImage" accept="image/*" />
+  <input
+  type="file"
+  id="vehicleImage"
+  accept="image/*"
+  onChange={(e) => setSelectedFile(e.target.files[0])}
+/>
 
   <h3>Operation</h3>
 

@@ -1,0 +1,23 @@
+{
+  "name": "process-image",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "zip": "bestzip lambda.zip index.mjs package.json package-lock.json node_modules/*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-lambda": "^3.1101.0",
+    "@aws-sdk/client-rekognition": "^3.1101.0",
+    "@aws-sdk/client-s3": "^3.1101.0",
+    "mysql2": "^3.23.2"
+  },
+  "devDependencies": {
+    "bestzip": "^3.0.1"
+  }
+}
