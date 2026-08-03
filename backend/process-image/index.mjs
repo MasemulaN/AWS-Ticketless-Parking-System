@@ -30,6 +30,51 @@ const lambda = new LambdaClient({
   region: LAMBDA_REGION,
 });
 
+// ---------------- PLATE EXTRACTION ----------------
+
+function extractPlate(detections) {
+  // Step 1: Try LINE results first (after cleaning noise characters)
+  const lines = detections.filter(
+    (item) => item.Type === "LINE" && item.Confidence > 80
+  );
+
+  for (const line of lines) {
+    const cleaned = line.DetectedText
+      .replace(/[^A-Z0-9 ]/g, "")   // Remove dashes and special chars
+      .replace(/\s+/g, " ")          // Collapse multiple spaces
+      .trim();
+
+    // Match South African plate format: ABC 123 MP
+    if (/^[A-Z]{2,3} \d{3} [A-Z]{2}$/.test(cleaned)) {
+      return cleaned;
+    }
+  }
+
+  // Step 2: Fallback - reconstruct plate from high-confidence WORD detections
+  const words = detections
+    .filter((item) => item.Type === "WORD" && item.Confidence > 85)
+    .map((item) => item.DetectedText)
+    .filter((text) => /^[A-Z0-9]+$/.test(text)); // Only alphanumeric words
+
+  // Try all combinations of 3 consecutive words
+  for (let i = 0; i <= words.length - 3; i++) {
+    const candidate = `${words[i]} ${words[i + 1]} ${words[i + 2]}`;
+    if (/^[A-Z]{2,3} \d{3} [A-Z]{2}$/.test(candidate)) {
+      return candidate;
+    }
+  }
+
+  return null;
+}
+
+// ---------------- CORS HEADERS ----------------
+
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "http://localhost:5173",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "OPTIONS,POST",
+};
+
 // ---------------- HANDLER ----------------
 
 export const handler = async (event) => {
@@ -52,11 +97,7 @@ export const handler = async (event) => {
     if (!image || !operation) {
       return {
         statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "http://localhost:5173",
-          "Access-Control-Allow-Headers": "Content-Type",
-          "Access-Control-Allow-Methods": "OPTIONS,POST",
-        },
+        headers: CORS_HEADERS,
         body: JSON.stringify({
           message: "Image and operation are required.",
         }),
@@ -66,7 +107,6 @@ export const handler = async (event) => {
     console.log("Image received");
 
     const imageBuffer = Buffer.from(image, "base64");
-
     const objectKey = `uploads/${Date.now()}.jpg`;
 
     console.log("Uploading to S3...");
@@ -81,7 +121,6 @@ export const handler = async (event) => {
     );
 
     console.log("Image uploaded");
-
     console.log("Running Rekognition...");
 
     const rekognitionResponse = await rekognition.send(
@@ -97,36 +136,25 @@ export const handler = async (event) => {
 
     console.log("Rekognition complete");
 
-    const detections =
-      rekognitionResponse.TextDetections || [];
+    const detections = rekognitionResponse.TextDetections || [];
 
-    console.log(
-      JSON.stringify(detections, null, 2)
-    );
+    console.log(JSON.stringify(detections, null, 2));
 
-    // Relaxed regex for South African plates
-    const plateLine = detections.find(
-      (text) =>
-        text.Type === "LINE" &&
-        /^[A-Z]{2,3}\s?\d{3}\s?[A-Z]{0,2}$/.test(
-          text.DetectedText.trim()
-        )
-    );
-
-    const plateNumber = plateLine
-      ? plateLine.DetectedText.trim()
-      : "Plate not found";
+    // Extract plate using improved logic
+    const plate = extractPlate(detections);
+    const plateNumber = plate ?? "Plate not found";
 
     console.log("Plate:", plateNumber);
 
-    console.log("Invoking save-record Lambda...");
-
+    // ✅ FIX 1: Use plate_number (snake_case) to match Lambda 2 expectation
     const payload = {
-      plateNumber,
+      plate_number: plateNumber,
       operation,
     };
 
-    const response = await lambda.send(
+    console.log("Invoking nm-autopark-manage-session Lambda...");
+
+    const lambdaResponse = await lambda.send(
       new InvokeCommand({
         FunctionName: SAVE_RECORD_FUNCTION,
         InvocationType: "RequestResponse",
@@ -134,38 +162,35 @@ export const handler = async (event) => {
       })
     );
 
-    const lambda2Response = Buffer.from(
-      response.Payload
-    ).toString();
-
-    console.log(
-      "Lambda 2 Response:",
-      lambda2Response
+    // ✅ FIX 2: Parse Lambda 2 response properly
+    const lambda2Result = JSON.parse(
+      Buffer.from(lambdaResponse.Payload).toString()
     );
 
+    console.log("Lambda 2 Result:", lambda2Result);
+
+    // ✅ FIX 3: Parse the body from Lambda 2
+    const lambda2Body = JSON.parse(lambda2Result.body);
+
+    console.log("Lambda 2 Body:", lambda2Body);
+
+    // ✅ FIX 4: Forward Lambda 2 response to frontend with plate and operation
     return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "OPTIONS,POST",
-      },
+      statusCode: lambda2Result.statusCode,
+      headers: CORS_HEADERS,
       body: JSON.stringify({
-        success: true,
-        plateNumber,
-        operation,
+        ...lambda2Body,              // Spreads message, entry_time, exit_time, duration_minutes, fee_rands
+        plate_number: plateNumber,   // Always include detected plate
+        operation,                   // Always include operation
       }),
     };
+
   } catch (error) {
     console.error("ERROR:", error);
 
     return {
       statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "http://localhost:5173",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "OPTIONS,POST",
-      },
+      headers: CORS_HEADERS,
       body: JSON.stringify({
         message: error.message,
       }),
