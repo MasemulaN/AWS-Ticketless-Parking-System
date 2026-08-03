@@ -294,7 +294,3 @@ Proper CORS configuration was required to allow requests from the frontend durin
 **Noluthando Masemula**
 
 Cloud Computing | Software Development | AWS
-
-GitHub: *(Add your GitHub profile)*
-
-LinkedIn: *(Add your LinkedIn profile)*
