@@ -92,7 +92,7 @@ To overcome this limitation:
 - Amazon Rekognition processes the image from the same region
 - Only the detected licence plate is returned to the application
 
-This solution allows the application to use Rekognition without moving the rest of the infrastructure outside South Africa. The API Gateway, Lambda functions and RDS database all remain deployed in the Africa (Cape Town) region.
+This solution allows the application to use Rekognition without moving the rest of the infrastructure outside South Africa. The API Gateway, Lambda functions and RDS database all remain deployed in the Africa (Cape Town) region. I understand that it is a good practice to have two buckets — one in the host region for primary data storage or processing, and a replica bucket in the target region using Amazon S3 Cross-Region Replication (CRR) to ensure low latency, high availability, and disaster recovery for local AWS services, especially for big enterprice systems. However, for the system I opted for using 1 bucket in a different region to show that I understand the concept of cross-region
 
 ---
 
