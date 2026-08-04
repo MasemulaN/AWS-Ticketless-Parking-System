@@ -5,15 +5,13 @@ An AI-powered ticketless parking management system built on AWS that automatical
 The project demonstrates a modern serverless architecture by combining React, API Gateway, AWS Lambda, Amazon Rekognition, Amazon S3, and Amazon RDS MySQL to automate vehicle entry and exit processing.
 
 ---
+# 🏗️ AWS Architecture
 
-# 📸 Demo
-
-<img width="1588" height="773" alt="demo1" src="https://github.com/user-attachments/assets/49a21bde-b1f9-4e2c-a51d-51eee3834bfa" />
-<img width="1580" height="775" alt="demo2" src="https://github.com/user-attachments/assets/d76d1f8e-a2be-49ff-9f16-dfc11f5d7a4f" />
-<img width="1575" height="769" alt="demo4" src="https://github.com/user-attachments/assets/74889594-803a-4e8b-8797-dc4697f5ff8a" />
-
+<img width="1000" height="778" alt="parking system drawio" src="https://github.com/user-attachments/assets/9be3edac-6892-4a37-b07a-85a5e8f7434b" />
 
 ---
+
+
 
 # ✨ Features
 
@@ -95,14 +93,6 @@ To overcome this limitation:
 - Only the detected licence plate is returned to the application
 
 This solution allows the application to use Rekognition without moving the rest of the infrastructure outside South Africa. The API Gateway, Lambda functions and RDS database all remain deployed in the Africa (Cape Town) region.
-
----
-
-# 🏗️ AWS Architecture
-
-<img width="1000" height="778" alt="parking system drawio" src="https://github.com/user-attachments/assets/9be3edac-6892-4a37-b07a-85a5e8f7434b" />
-
-
 
 ---
 
@@ -261,6 +251,14 @@ Proper CORS configuration was required to allow requests from the frontend durin
 - Amazon S3
 - Amazon Rekognition
 - Amazon RDS MySQL
+
+---
+
+# 📸 Demo
+
+<img width="1588" height="773" alt="demo1" src="https://github.com/user-attachments/assets/49a21bde-b1f9-4e2c-a51d-51eee3834bfa" />
+<img width="1580" height="775" alt="demo2" src="https://github.com/user-attachments/assets/d76d1f8e-a2be-49ff-9f16-dfc11f5d7a4f" />
+<img width="1575" height="769" alt="demo4" src="https://github.com/user-attachments/assets/74889594-803a-4e8b-8797-dc4697f5ff8a" />
 
 ---
 
