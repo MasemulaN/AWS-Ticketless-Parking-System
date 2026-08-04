@@ -112,7 +112,7 @@ This solution allows the application to use Rekognition without moving the rest 
 # 📂 Project Structure
 
 ```
-AutoPark-Vision/
+AWS-Ticketless-Parking-System/
 │
 ├── frontend/
 │
