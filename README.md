@@ -2,7 +2,7 @@
 
 An AI-powered ticketless parking management system built on AWS that automatically detects vehicle license plates, records parking sessions, calculates parking duration and parking fees, and provides a real-time parking history dashboard.
 
-The project demonstrates a modern serverless architecture by combining React, API Gateway, AWS Lambda, Amazon Rekognition, Amazon S3, and Amazon RDS MySQL to automate vehicle entry and exit processing. :contentReference[oaicite:0]{index=0}
+The project demonstrates a modern serverless architecture by combining React, API Gateway, AWS Lambda, Amazon Rekognition, Amazon S3, and Amazon RDS MySQL to automate vehicle entry and exit processing.
 
 ---
 
