@@ -8,13 +8,10 @@ The project demonstrates a modern serverless architecture by combining React, AP
 
 # 📸 Demo
 
-> Add screenshots or GIFs here
+<img width="1588" height="773" alt="demo1" src="https://github.com/user-attachments/assets/49a21bde-b1f9-4e2c-a51d-51eee3834bfa" />
+<img width="1580" height="775" alt="demo2" src="https://github.com/user-attachments/assets/d76d1f8e-a2be-49ff-9f16-dfc11f5d7a4f" />
+<img width="1575" height="769" alt="demo4" src="https://github.com/user-attachments/assets/74889594-803a-4e8b-8797-dc4697f5ff8a" />
 
-- Vehicle Processing
-- Sessions Dashboard
-- AWS Architecture
-- Database
-- CloudWatch Logs
 
 ---
 
