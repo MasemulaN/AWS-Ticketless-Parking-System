@@ -100,7 +100,8 @@ This solution allows the application to use Rekognition without moving the rest 
 
 # 🏗️ AWS Architecture
 
-<img width="1000" height="778" alt="Autopark architecture drawio" src="https://github.com/user-attachments/assets/27dfce3a-b8b5-4a97-a01c-0ab0ba703bb6" />
+<img width="1000" height="778" alt="autopark drawing drawio" src="https://github.com/user-attachments/assets/e6aa652a-54ae-476b-b1dc-84a0bb8851fa" />
+
 ---
 
 # ☁️ AWS Services Used
