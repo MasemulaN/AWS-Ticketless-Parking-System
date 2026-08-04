@@ -104,29 +104,8 @@ This solution allows the application to use Rekognition without moving the rest 
 # 🏗️ AWS Architecture
 
 ```
-React Frontend
-       │
-       ▼
-API Gateway (HTTP API)
-       │
- ┌───────────────┐
- │               │
- ▼               ▼
-Lambda 1      Lambda 3
-(Process)     (Get Sessions)
-      │
-      ▼
-Amazon S3 (Ireland)
-      │
-      ▼
-Amazon Rekognition
-      │
-      ▼
-Lambda 2
-(Session Manager)
-      │
-      ▼
-Amazon RDS MySQL
+<img width="1000" height="778" alt="Autopark architecture drawio" src="https://github.com/user-attachments/assets/0258f036-b67d-4233-bdfa-41905b58131b" />
+
 ```
 
 ---
