@@ -57,7 +57,7 @@ export const handler = async (event) => {
       params.push(plate_number.toUpperCase());
     }
 
-    // ✅ Filter by date if provided (format: YYYY-MM-DD)
+    
     if (date) {
       query += ` AND DATE(e.timestamp) = ?`;
       params.push(date);

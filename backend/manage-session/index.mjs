@@ -12,8 +12,8 @@ const db = mysql.createPool({
 
 
 
-const RATE_PER_HOUR = 10; // R10 per hour
-const FREE_MINUTES = 15;  // First 15 minutes are free
+const RATE_PER_HOUR = 10; 
+const FREE_MINUTES = 15; 
 
 
 
@@ -105,7 +105,7 @@ export const handler = async (event) => {
         fee = Math.ceil(durationHours * RATE_PER_HOUR);
       }
 
-      // Insert exit record
+  
       await db.query(
         'INSERT INTO vehicles (plate_number, operation) VALUES (?, ?)',
         [plate_number, 'EXIT']
