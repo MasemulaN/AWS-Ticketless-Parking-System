@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 
-// ---------------- DATABASE ----------------
+
 
 const db = mysql.createPool({
   host: process.env.DB_HOST,
@@ -10,19 +10,19 @@ const db = mysql.createPool({
   port: process.env.DB_PORT || 3306,
 });
 
-// ---------------- PARKING FEE CONSTANTS ----------------
+
 
 const RATE_PER_HOUR = 10; // R10 per hour
 const FREE_MINUTES = 15;  // First 15 minutes are free
 
-// ---------------- HANDLER ----------------
+
 
 export const handler = async (event) => {
   console.log('Event received:', JSON.stringify(event));
 
   const { plate_number, operation } = event;
 
-  // ✅ Validate inputs
+
   if (!plate_number || !operation) {
     return {
       statusCode: 400,
@@ -41,7 +41,7 @@ export const handler = async (event) => {
 
   try {
 
-    // ---------------- ENTRY ----------------
+
 
     if (op === 'ENTRY') {
       const entryTime = new Date();
@@ -58,15 +58,15 @@ export const handler = async (event) => {
           message: 'Vehicle entry recorded successfully',
           plate_number,
           operation: 'ENTRY',
-          entry_time: entryTime.toISOString(), // ✅ Now returns entry_time
+          entry_time: entryTime.toISOString(), 
         }),
       };
 
-    // ---------------- EXIT ----------------
+
 
     } else if (op === 'EXIT') {
 
-      // Find the most recent ENTRY for this plate that has no matching EXIT
+    
       const [entryRows] = await db.query(
         `SELECT * FROM vehicles 
          WHERE plate_number = ? AND operation = 'ENTRY' 
@@ -94,7 +94,7 @@ export const handler = async (event) => {
       const entryTime = new Date(entryRows[0].timestamp);
       const exitTime = new Date();
 
-      // Calculate duration in minutes
+      
       const durationMs = exitTime - entryTime;
       const durationMinutes = Math.floor(durationMs / 60000);
       const durationHours = durationMs / 3600000;

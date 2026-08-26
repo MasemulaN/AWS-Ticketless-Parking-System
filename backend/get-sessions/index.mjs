@@ -1,6 +1,5 @@
 import mysql from 'mysql2/promise';
 
-// ---------------- DATABASE ----------------
 
 const db = mysql.createPool({
   host: process.env.DB_HOST,
@@ -10,17 +9,17 @@ const db = mysql.createPool({
   port: process.env.DB_PORT || 3306,
 });
 
-// ---------------- HANDLER ----------------
+
 
 export const handler = async (event) => {
   console.log('Event received:', JSON.stringify(event));
 
   try {
-    // ✅ Extract optional filters from query string
+  
     const queryParams = event.queryStringParameters || {};
     const { plate_number, date } = queryParams;
 
-    // ---------------- BUILD QUERY ----------------
+   
 
     let query = `
       SELECT 
@@ -52,7 +51,7 @@ export const handler = async (event) => {
 
     const params = [];
 
-    // ✅ Filter by plate number if provided
+
     if (plate_number) {
       query += ` AND e.plate_number = ?`;
       params.push(plate_number.toUpperCase());
@@ -64,16 +63,16 @@ export const handler = async (event) => {
       params.push(date);
     }
 
-    // ✅ Always return most recent sessions first
+
     query += ` ORDER BY e.timestamp DESC`;
 
-    // ---------------- EXECUTE QUERY ----------------
+
 
     const [rows] = await db.query(query, params);
 
     console.log(`Found ${rows.length} sessions`);
 
-    // ---------------- FORMAT RESPONSE ----------------
+   
 
     const sessions = rows.map((row) => ({
       entry_id: row.entry_id,
