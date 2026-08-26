@@ -11,8 +11,6 @@ The project demonstrates a modern serverless architecture by combining React, AP
 
 ---
 
-
-
 # ✨ Features
 
 - 🚘 Automatic license plate recognition
